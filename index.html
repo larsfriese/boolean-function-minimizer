@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Schaltfunktion minimierer</title>
+
+        <!-- Imports bootstrap css/js -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+        <!-- Imports Mathjax js -->
+        <script>
+            MathJax = {
+              tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+              },
+              svg: {
+                fontCache: 'global'
+              }
+            };
+        </script>
+        <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+    </head>
+    <body>
+        <div class="container">
+            <h3 class="mb-2 mt-2">
+                Minimization of booloean functions
+                <small class="text-muted">using the Quine–McCluskey algorithm</small>
+            </h3>
+            <div class="row">
+                <div class="col">
+
+                    Number of bits:
+                    <div class="form-check form-check-inline ">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="3" onclick="dimSelected();">
+                        <label class="form-check-label" for="inlineRadio1">3</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="4" onclick="dimSelected();" checked>
+                        <label class="form-check-label" for="inlineRadio2">4</label>
+                      </div>
+                      <div class="form-check form-check-inline mb-2">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="5" onclick="dimSelected();">
+                        <label class="form-check-label" for="inlineRadio3">5</label>
+                    </div>
+                    
+                    <div id="table"></div>
+
+                </div>
+                <div class="col-8">
+
+                    <div class="dropdown mt-2">
+                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Presets
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item disabled">Clockwork (4 bits)</a></li>
+                          <li><a class="dropdown-item" onclick="Multiplexer4b();">Multiplexer (4 bits)</a></li>
+                          <li><a class="dropdown-item disabled">3-out-of-4-Majority-Generator (4 bits)</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="card mt-2" style="width: 40%;">
+                        <div class="card-body">
+                            <h5 class="card-title">Minimierte Schaltfunktion: </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">4 eingangs variablen</h6>
+                            <p class="card-text" id="Schaltfunktion"></p>
+                        </div>
+                    </div>
+
+                    <div id="textboxes"></div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <script type="text/javascript" src="script.js"></script>
+        <script type="text/javascript" src="helper.js"></script>
+        <script type="text/javascript" src="presets.js"></script>  
+    </body>
+</html>
