@@ -79,9 +79,7 @@ function findUnterwürfel(ones, diffChars) {
             // find index of elements of res in ones
             // and tick in taken
             for (let res_i = 0; res_i < res[i].length; res_i++) {
-                console.log(res[i]);
                 taken[ones.indexOf(res[i][res_i])] = 1;
-                console.log(taken);
             }
 
             // only add to list if not there
@@ -146,5 +144,7 @@ function main(ones) {
     // update the formula
     document.getElementById("Schaltfunktion").innerHTML = "$ " + primImpl_to_SchaltFunk(primImpl) + " $";
     MathJax.typeset(["#Schaltfunktion"]);
+
+    return primImpl;
 }
 
