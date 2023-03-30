@@ -51,7 +51,7 @@ function checkBox() {
         var checkedValue = document.getElementById('flexCheckDefault' + dec2bin(i));
         if (checkedValue.checked) {
             ones.push(leadingZeros(checkedValue.value, dimValue));
-            ticked.push("class='table-danger'");
+            ticked.push("class='bg-success'");
         } else {
             ticked.push("");
         }
@@ -64,7 +64,14 @@ function checkBox() {
     var minimial_functions = PetricksMethod(primImpl);
 
     // add minimal expressions and refresh MathJax
-    document.getElementById("Schaltfunktion").innerHTML += "<h6 class='card-subtitle mb-2 text-muted'><br>Minimal Expression:<br></h6> $ " + minimial_functions[0] + " $";
+    if (minimial_functions.length == 1) {
+        document.getElementById("Schaltfunktion").innerHTML += "<h6 class='card-subtitle mb-2 text-muted'><br>Minimal Expression:<br></h6>";
+    } else {
+        document.getElementById("Schaltfunktion").innerHTML += "<h6 class='card-subtitle mb-2 text-muted'><br>Minimal Expressions:<br></h6>";
+    }
+    for (let i = 0; i < minimial_functions.length; i++) {
+        document.getElementById("Schaltfunktion").innerHTML += "$ " + minimial_functions[i] + " $<br>";
+    }
     MathJax.typeset(["#Schaltfunktion"]);
 
 
