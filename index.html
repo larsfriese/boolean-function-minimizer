@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html data-bs-theme="dark">
     <head>
         <meta charset="utf-8">
         <title>Schaltfunktion minimierer</title>
@@ -27,7 +27,7 @@
     </head>
     <body>
         <div class="container">
-            <h3 class="mb-2 mt-2">
+            <h3 class="mb-4 mt-4">
                 Minimization of booloean functions
                 <small class="text-muted">using the Quine–McCluskey algorithm and Petricks method</small>
             </h3>
@@ -66,18 +66,20 @@
 
                     <div class="card mt-2" style="overflow: auto;">
                       <div class="card-body">
-                          <h5 class="card-title">Minimierte Schaltfunktion: </h5>
-                          <h6 class="card-subtitle mb-2 text-muted">4 eingangs variablen</h6>
+                          <h5 class="card-title">Boolean Function: </h5>
+                          <h6 class="card-subtitle mb-2 text-muted">Combination of all prime implicants:</h6>
                           <p class="card-text" id="Schaltfunktion"></p>
                       </div>
                     </div>
 
+                    <div id="textboxes"></div>
+
                 </div>
+
                 <div class="col mt-4">
                   <div id="kv_table"></div>
                 </div>
 
-                    <div id="textboxes"></div>
             </div>
         </div>
 
