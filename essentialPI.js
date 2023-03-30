@@ -196,7 +196,6 @@ function PetricksMethod(primeImplicantList) {
         list_of_smalles_pis.push([]);
 
         for (let e = 0; e < smallest_list[i].length; e++) {
-            console.log(e);
 
             // convert string to number in ascii
             var number_of_PI = smallest_list[i][e].charCodeAt(0) - 65;
@@ -211,8 +210,6 @@ function PetricksMethod(primeImplicantList) {
         list_of_smalles_pis[i] = primImpl_to_SchaltFunk(list_of_smalles_pis[i]);
     }
 
-    console.log(list_of_smalles_pis);
-    console.log(list_of_smalles_pis[0]);
     return list_of_smalles_pis;
 
 }
