@@ -8,9 +8,44 @@ function leadingZeros(bin, paddingSize) {
     return bin.padStart(paddingSize, '0');
 }
 
+// get permutations for a list, no duplicate elements and order doesnt matter
+// found here: https://stackoverflow.com/a/62854671
+function getPermutationsWD(array, length) {
+    return array.flatMap((v, i) => length > 1
+        ? getPermutationsWD(array.slice(i + 1), length - 1).map(w => [v, ...w])
+        : [[v]]
+    );
+}
+
+// replaces charachters at a given index in a string
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+}
+
+// converts list of prime implicants to a string that represents the switch function (schaltfunktion)
+function primImpl_to_SchaltFunk(primImpl) {
+    finalString = "";
+
+    for (let i = 0; i < primImpl.length; i++) {
+        for (let e = 0; e < primImpl[i].length; e++) {
+            if (primImpl[i][e] == '1') {
+                finalString += 'x_' + (primImpl[i].length - e - 1).toString();
+            }
+            else if (primImpl[i][e] == '0') {
+                finalString += 'x_' + (primImpl[i].length - e - 1).toString() + "'";
+            }
+            else {
+                finalString += '';
+            }
+        }
+        if (i != primImpl.length - 1) {finalString += ' + ';}
+    }
+    return finalString;
+}
+
 // function is called when a number of bits for the switch function have been selected
 function dimSelected() {
-    var dimValue = document.querySelector( 'input[name="inlineRadioOptions"]:checked').value;
+    var bits = document.querySelector( 'input[name="inlineRadioOptions"]:checked').value;
     let str = "";
 
     const table = document.getElementById('table');
@@ -25,7 +60,7 @@ function dimSelected() {
         </thead>
         <tbody>`;
 
-    for (let i = 0; i < Math.pow(2, dimValue); i++) {
+    for (let i = 0; i < Math.pow(2, bits); i++) {
         str += `
         <tr>
             <th scope="row">` + i + `</th>
@@ -43,14 +78,14 @@ function dimSelected() {
 }
 
 function checkBox() {
-    var dimValue = document.querySelector( 'input[name="inlineRadioOptions"]:checked').value;
+    var bits = document.querySelector( 'input[name="inlineRadioOptions"]:checked').value;
     var ones = [];
     var ticked = [];
     
-    for (let i = 0; i < Math.pow(2, dimValue); i++) {
+    for (let i = 0; i < Math.pow(2, bits); i++) {
         var checkedValue = document.getElementById('flexCheckDefault' + dec2bin(i));
         if (checkedValue.checked) {
-            ones.push(leadingZeros(checkedValue.value, dimValue));
+            ones.push(leadingZeros(checkedValue.value, bits));
             ticked.push("class='bg-success'");
         } else {
             ticked.push("");
@@ -58,7 +93,13 @@ function checkBox() {
     }
 
     // find prime implicants
-    var primImpl = main(ones);
+    var primImpl = QuineMcCluskey(ones, bits);
+
+    // set formula in html and reload mathjax
+    document.getElementById("Schaltfunktion").innerHTML = "$ " + primImpl_to_SchaltFunk(primImpl) + " $";
+    MathJax.typeset(["#Schaltfunktion"]);
+
+    console.log(primImpl);
 
     // find minimal expressions
     var minimial_functions = PetricksMethod(primImpl);
@@ -75,7 +116,7 @@ function checkBox() {
     MathJax.typeset(["#Schaltfunktion"]);
 
 
-    if (dimValue == 4) {
+    if (bits == 4) {
         let str = "";
         const table = document.getElementById('kv_table');
         
