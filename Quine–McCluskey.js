@@ -130,7 +130,6 @@ function QuineMcCluskey(ones, bits) {
     for (let i = 0; i < ones.length; i++) {
 
         // number of zeros in binary number
-        console.log(ones[i]);
         var number_of_ones = ones[i].toString().replace(/[^1]/g, "").length;
 
         // sort number into grouped list
@@ -150,14 +149,11 @@ function QuineMcCluskey(ones, bits) {
         grouped = results[0];
         prime_implicants = prime_implicants.concat(results[1]);
         number_of_iteration += 1;
-        //console.log("after");
-        //console.log(results);
         var counter = 0;
         for (let i = 0; i < grouped.length; i++) {
             if (grouped[i].length == 0) {counter += 1;}
         }
         if (counter == grouped.length) {cond = false;}
-        // if (number_of_iteration == 4) {throw new Error();}
     }
 
     return prime_implicants;
