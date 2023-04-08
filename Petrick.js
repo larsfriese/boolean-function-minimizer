@@ -156,7 +156,6 @@ function PetricksMethod(primeImplicantList) {
         sum_of_products.push(temp);
     }
 
-    console.log(sum_of_products);
     // var sum_of_products = [["K", "L"], ["K", "M"], ["L", "N"], ["M", "P"], ["N", "Q"], ["P", "Q"]];
 
     // multiply out the sum of products and apply the rules of:
