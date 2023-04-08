@@ -1,3 +1,6 @@
+var CURRENT_BITS = 3;
+var CURRENT_FORMULA = "";
+
 // turns a decimal number into a string of binary numbers
 function dec2bin(dec) {
     return (dec >>> 0).toString(2);
@@ -8,21 +11,12 @@ function leadingZeros(bin, paddingSize) {
     return bin.padStart(paddingSize, '0');
 }
 
-// get permutations for a list, no duplicate elements and order doesnt matter
-// found here: https://stackoverflow.com/a/62854671
-function getPermutationsWD(array, length) {
-    return array.flatMap((v, i) => length > 1
-        ? getPermutationsWD(array.slice(i + 1), length - 1).map(w => [v, ...w])
-        : [[v]]
-    );
-}
-
 // replaces charachters at a given index in a string
 String.prototype.replaceAt = function(index, replacement) {
     return this.substring(0, index) + replacement + this.substring(index + replacement.length);
 }
 
-// converts list of prime implicants to a string that represents the switch function (schaltfunktion)
+// converts list of prime implicants to a string that represents the boolean function
 function primImpl_to_SchaltFunk(primImpl) {
     finalString = "";
 
@@ -44,9 +38,12 @@ function primImpl_to_SchaltFunk(primImpl) {
 }
 
 // function is called when a number of bits for the switch function have been selected
-function dimSelected() {
-    var bits = document.querySelector( 'input[name="inlineRadioOptions"]:checked').value;
+function dimSelected(bits) {
+    CURRENT_BITS = bits;
     let str = "";
+
+    const button = document.getElementById('number_of_bits');
+    button.innerHTML = "Number of Bits (" + CURRENT_BITS.toString() + ")";
 
     const table = document.getElementById('table');
     str = `
@@ -77,32 +74,45 @@ function dimSelected() {
     table.innerHTML = str;
 }
 
+// this function gets called everytime a box gets checked
 function checkBox() {
-    var bits = document.querySelector( 'input[name="inlineRadioOptions"]:checked').value;
     var ones = [];
     var ticked = [];
     
-    for (let i = 0; i < Math.pow(2, bits); i++) {
+    // check if the checkboxes are checked and add the binary values to a list
+    for (let i = 0; i < Math.pow(2, CURRENT_BITS); i++) {
         var checkedValue = document.getElementById('flexCheckDefault' + dec2bin(i));
         if (checkedValue.checked) {
-            ones.push(leadingZeros(checkedValue.value, bits));
+            ones.push(leadingZeros(checkedValue.value, CURRENT_BITS));
             ticked.push("class='bg-success'");
         } else {
             ticked.push("");
         }
     }
 
+    // if all or no boxes are checked
+    if (ones.length == Math.pow(2, CURRENT_BITS)) {
+        document.getElementById("Schaltfunktion").innerHTML = "$ f(x) = 1 $";
+        MathJax.typeset(["#Schaltfunktion"]);
+        return;
+    } else if (ones.length == 0) {
+        document.getElementById("Schaltfunktion").innerHTML = "$ f(x) = 0 $";
+        MathJax.typeset(["#Schaltfunktion"]);
+        return;
+    }
+
     // find prime implicants
-    var primImpl = QuineMcCluskey(ones, bits);
+    var primImpl = QuineMcCluskey(ones, CURRENT_BITS);
 
     // set formula in html and reload mathjax
-    document.getElementById("Schaltfunktion").innerHTML = "$ " + primImpl_to_SchaltFunk(primImpl) + " $";
+    document.getElementById("Schaltfunktion").innerHTML = "$ f(x) = " + primImpl_to_SchaltFunk(primImpl) + " $";
     MathJax.typeset(["#Schaltfunktion"]);
-
-    console.log(primImpl);
 
     // find minimal expressions
     var minimial_functions = PetricksMethod(primImpl);
+
+    // for clipbard later
+    CURRENT_FORMULA = minimial_functions[0];
 
     // add minimal expressions and refresh MathJax
     if (minimial_functions.length == 1) {
@@ -111,12 +121,12 @@ function checkBox() {
         document.getElementById("Schaltfunktion").innerHTML += "<h6 class='card-subtitle mb-2 text-muted'><br>Minimal Expressions:<br></h6>";
     }
     for (let i = 0; i < minimial_functions.length; i++) {
-        document.getElementById("Schaltfunktion").innerHTML += "$ " + minimial_functions[i] + " $<br>";
+        document.getElementById("Schaltfunktion").innerHTML += "$ f(x) = " + minimial_functions[i] + " $<br>";
     }
     MathJax.typeset(["#Schaltfunktion"]);
 
-
-    if (bits == 4) {
+    // create KV diagramm for 4bit input
+    if (CURRENT_BITS == 4) {
         let str = "";
         const table = document.getElementById('kv_table');
         
@@ -164,11 +174,19 @@ function checkBox() {
         </table>
         `;
         table.innerHTML = str;
+    } else {
+        const table = document.getElementById('kv_table');
+        table.innerHTML = "";
     }
 
 }
 
 // on window load select number of bits so table appears
 window.addEventListener("load", (event) => {
-    dimSelected();
+    dimSelected(3);
   });
+
+// copy to clipboard
+function copy_to_clip() {
+    navigator.clipboard.writeText(CURRENT_FORMULA);
+}
